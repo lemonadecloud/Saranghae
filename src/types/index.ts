@@ -1,6 +1,7 @@
 export type SourceType = 'interview' | 'variety' | 'lyrics' | 'sns' | 'behind'
 export type Difficulty = 'beginner' | 'elementary' | 'intermediate'
 export type GroupType = 'boygroup' | 'girlgroup' | 'solo'
+export type ShowGenre = 'drama' | 'variety'
 
 export interface ExpressionExample {
   context: string
@@ -29,6 +30,31 @@ export interface Expression {
   saves: number
   createdAt: string
   updatedAt: string
+}
+
+export interface Show {
+  id: string
+  titleKo: string
+  titleEn: string
+  genre: ShowGenre
+  year: number
+  network: string
+  description: string
+  color: string
+  imageUrl?: string
+}
+
+export interface CultureExpression {
+  id: string
+  showId: string
+  korean: string
+  romanization: string
+  meaningKo: string
+  meaningEn: string
+  nuanceNote: string
+  difficulty: Difficulty
+  tags: string[]
+  episode?: string
 }
 
 export interface Artist {

@@ -2,9 +2,10 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
-import { RotateCcw, ChevronDown, ArrowRight, ArrowLeft, CheckCheck, PenLine } from 'lucide-react'
+import { RotateCcw, ChevronDown, ArrowRight, ArrowLeft, CheckCheck, PenLine, Brush } from 'lucide-react'
 import { getAllExpressions, getAllArtists } from '@/lib/data'
 import { scorePixelCoverage, getKoreanChars, scoreToStars } from '@/lib/hangul-recognizer'
+import { getComposedStrokes } from '@/lib/hangul-strokes'
 import { useStudyStats } from '@/hooks/useStudyStats'
 
 const CANVAS_SIZE = 320
@@ -45,7 +46,11 @@ export default function WritePage() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const guideCanvasRef = useRef<HTMLCanvasElement>(null)
+  const strokeOrderCanvasRef = useRef<HTMLCanvasElement>(null)
   const { recordWrite } = useStudyStats()
+  const [showStrokeOrder, setShowStrokeOrder] = useState(false)
+  const [strokeStep, setStrokeStep] = useState(0)
+  const strokeAnimRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const expr = expressions[exprIdx]
   const chars = getKoreanChars(expr.korean)
@@ -85,6 +90,95 @@ export default function WritePage() {
   }, [currentChar, artist])
 
   useEffect(() => { drawGuide() }, [drawGuide])
+
+  // ── Stroke order rendering ────────────────────────────────────
+  const drawStrokeOrder = useCallback((upToStep: number) => {
+    const c = strokeOrderCanvasRef.current
+    if (!c || !currentChar) return
+    const ctx = c.getContext('2d')!
+    ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
+
+    const strokes = getComposedStrokes(currentChar, CANVAS_SIZE)
+    if (strokes.length === 0) return
+
+    const COLORS = ['#FF2D78','#00D4FF','#A855F7','#FFB800','#4ADE80','#FF6B35','#60A5FA']
+
+    strokes.slice(0, upToStep).forEach((stroke, idx) => {
+      const pts = stroke.points
+      if (pts.length < 2) return
+      const col = COLORS[idx % COLORS.length]
+      const isLatest = idx === upToStep - 1
+
+      // Draw stroke path
+      ctx.beginPath()
+      ctx.moveTo(pts[0].x, pts[0].y)
+      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y)
+      ctx.strokeStyle = isLatest ? col : col + '55'
+      ctx.lineWidth = isLatest ? 3 : 2
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+      ctx.stroke()
+
+      // Arrowhead at end
+      const last = pts[pts.length - 1]
+      const prev = pts[pts.length - 2]
+      const angle = Math.atan2(last.y - prev.y, last.x - prev.x)
+      const alen = isLatest ? 10 : 7
+      ctx.beginPath()
+      ctx.moveTo(last.x, last.y)
+      ctx.lineTo(last.x - alen * Math.cos(angle - 0.45), last.y - alen * Math.sin(angle - 0.45))
+      ctx.moveTo(last.x, last.y)
+      ctx.lineTo(last.x - alen * Math.cos(angle + 0.45), last.y - alen * Math.sin(angle + 0.45))
+      ctx.strokeStyle = isLatest ? col : col + '55'
+      ctx.lineWidth = isLatest ? 2.5 : 1.5
+      ctx.stroke()
+
+      // Number badge at start
+      const r = isLatest ? 12 : 9
+      ctx.beginPath()
+      ctx.arc(pts[0].x, pts[0].y, r, 0, Math.PI * 2)
+      ctx.fillStyle = isLatest ? col : col + '88'
+      ctx.fill()
+      ctx.fillStyle = '#fff'
+      ctx.font = `bold ${isLatest ? 11 : 9}px sans-serif`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillText(String(idx + 1), pts[0].x, pts[0].y)
+    })
+  }, [currentChar])
+
+  // Animate stroke order
+  useEffect(() => {
+    if (strokeAnimRef.current) clearInterval(strokeAnimRef.current)
+    if (!showStrokeOrder) {
+      const c = strokeOrderCanvasRef.current
+      if (c) c.getContext('2d')!.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE)
+      return
+    }
+    const strokes = getComposedStrokes(currentChar, CANVAS_SIZE)
+    const total = strokes.length
+    if (total === 0) return
+
+    setStrokeStep(1)
+    strokeAnimRef.current = setInterval(() => {
+      setStrokeStep(prev => {
+        if (prev >= total) {
+          clearInterval(strokeAnimRef.current!)
+          return prev
+        }
+        return prev + 1
+      })
+    }, 900)
+    return () => { if (strokeAnimRef.current) clearInterval(strokeAnimRef.current) }
+  }, [showStrokeOrder, currentChar])
+
+  useEffect(() => { drawStrokeOrder(strokeStep) }, [strokeStep, drawStrokeOrder])
+
+  // Reset stroke order when char changes
+  useEffect(() => {
+    setShowStrokeOrder(false)
+    setStrokeStep(0)
+  }, [charIdx, exprIdx])
 
   // ── Clear draw canvas ─────────────────────────────────────────
   const clearCanvas = useCallback(() => {
@@ -346,13 +440,26 @@ export default function WritePage() {
             <span className="text-text-muted text-xs">{charIdx + 1} / {chars.length} 번째 글자</span>
             <p className="text-text-primary text-sm font-medium">{expr.meaningEn.slice(0, 40)}</p>
           </div>
-          <button
-            onClick={clearCanvas}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all hover:bg-white/5"
-            style={{ color: '#5A5A7A', border: '1px solid rgba(255,255,255,0.06)' }}
-          >
-            <RotateCcw size={12} /> 지우기
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowStrokeOrder(v => !v)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all hover:bg-white/5"
+              style={{
+                color: showStrokeOrder ? color : '#5A5A7A',
+                border: `1px solid ${showStrokeOrder ? color + '55' : 'rgba(255,255,255,0.06)'}`,
+                background: showStrokeOrder ? `${color}11` : 'transparent',
+              }}
+            >
+              <Brush size={12} /> 획순
+            </button>
+            <button
+              onClick={clearCanvas}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all hover:bg-white/5"
+              style={{ color: '#5A5A7A', border: '1px solid rgba(255,255,255,0.06)' }}
+            >
+              <RotateCcw size={12} /> 지우기
+            </button>
+          </div>
         </div>
 
         {/* Canvas stack */}
@@ -376,7 +483,7 @@ export default function WritePage() {
             height={CANVAS_SIZE}
             className="absolute inset-0 touch-none"
             style={{
-              cursor: checked ? 'default' : 'crosshair',
+              cursor: checked || showStrokeOrder ? 'default' : 'crosshair',
               opacity: checked ? 0.6 : 1,
             }}
             onMouseDown={startDraw}
@@ -386,6 +493,15 @@ export default function WritePage() {
             onTouchStart={startDraw}
             onTouchMove={draw}
             onTouchEnd={endDraw}
+          />
+
+          {/* Stroke order overlay canvas */}
+          <canvas
+            ref={strokeOrderCanvasRef}
+            width={CANVAS_SIZE}
+            height={CANVAS_SIZE}
+            className="absolute inset-0"
+            style={{ pointerEvents: 'none' }}
           />
 
           {/* Overlay hint */}
