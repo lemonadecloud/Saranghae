@@ -20,18 +20,11 @@ interface Reaction {
 }
 
 const ROOMS = [
-  { id: 'general',    label: 'general',    color: '#FF2D78' },
-  { id: 'bts',        label: 'bts',        color: '#9B59B6' },
-  { id: 'txt',        label: 'txt',        color: '#3498DB' },
-  { id: 'enhypen',    label: 'enhypen',    color: '#E74C3C' },
-  { id: 'lesserafim', label: 'lesserafim', color: '#F39C12' },
-  { id: 'seventeen',  label: 'seventeen',  color: '#2ECC71' },
-  { id: 'aespa',      label: 'aespa',      color: '#22D3EE' },
-  { id: 'twice',      label: 'twice',      color: '#F472B6' },
-  { id: 'straykids',  label: 'straykids',  color: '#FB923C' },
-  { id: 'blackpink',  label: 'blackpink',  color: '#EC4899' },
-  { id: 'ive',        label: 'ive',        color: '#34D399' },
-  { id: 'newjeans',   label: 'newjeans',   color: '#A78BFA' },
+  { id: 'general',   label: 'general',   color: '#FF2D78' },
+  { id: 'bts',       label: 'bts',       color: '#9B59B6' },
+  { id: 'txt',       label: 'txt',       color: '#3498DB' },
+  { id: 'blackpink', label: 'blackpink', color: '#EC4899' },
+  { id: 'twice',     label: 'twice',     color: '#F472B6' },
 ]
 
 const EMOJI_REACTIONS = ['❤️', '🔥', '😍', '👏', '✨']
