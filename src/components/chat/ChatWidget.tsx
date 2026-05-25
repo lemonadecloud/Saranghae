@@ -221,8 +221,6 @@ export default function ChatWidget() {
     fetchMessages(activeRoom, messages[0].created_at)
   }
 
-  if (!supabase) return null
-
   const activeColor = ROOMS.find(r => r.id === activeRoom)?.color ?? '#FF2D78'
 
   return (
@@ -238,7 +236,17 @@ export default function ChatWidget() {
       </button>
 
       {/* Chat panel */}
-      {isOpen && (
+      {isOpen && !supabase && (
+        <div
+          className="fixed bottom-24 right-6 z-50 flex flex-col items-center justify-center rounded-2xl shadow-2xl gap-3"
+          style={{ width: 360, height: 200, background: '#12121A', border: '1px solid rgba(255,255,255,0.08)' }}
+        >
+          <MessageCircle size={28} style={{ color: '#FF2D78', opacity: 0.5 }} />
+          <p className="text-sm font-semibold" style={{ color: '#E0E0F0' }}>Chat is setting up…</p>
+          <p className="text-xs text-center px-8" style={{ color: '#5050A0' }}>Supabase environment variables are not connected yet.</p>
+        </div>
+      )}
+      {isOpen && supabase && (
         <div
           className="fixed bottom-24 right-6 z-50 flex flex-col rounded-2xl overflow-hidden shadow-2xl"
           style={{
