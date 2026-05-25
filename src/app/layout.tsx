@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Noto_Sans_KR, Noto_Serif_KR, Bebas_Neue, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+import ChatWidget from '@/components/chat/ChatWidget'
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ['latin'],
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen flex flex-col bg-bg-base text-text-primary">
         <Navbar />
         <main className="flex-1">{children}</main>
+        <ChatWidget />
         <footer className="border-t border-white/5 py-8 mt-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-text-muted text-sm">
             <p className="font-display tracking-widest text-lg text-brand-pink mb-2">KPOP KOREAN</p>
