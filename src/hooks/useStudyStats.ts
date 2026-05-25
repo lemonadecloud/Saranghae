@@ -9,6 +9,10 @@ export interface StudyStats {
   quizQuestions: number
   quizCorrect: number
   bestStreak: number
+  writeSessions: number
+  writeChars: number
+  writeTotalScore: number
+  writeBestScore: number
 }
 
 const INITIAL: StudyStats = {
@@ -18,6 +22,10 @@ const INITIAL: StudyStats = {
   quizQuestions: 0,
   quizCorrect: 0,
   bestStreak: 0,
+  writeSessions: 0,
+  writeChars: 0,
+  writeTotalScore: 0,
+  writeBestScore: 0,
 }
 
 export function useStudyStats() {
@@ -39,5 +47,14 @@ export function useStudyStats() {
       bestStreak: Math.max(prev.bestStreak, streak),
     }))
 
-  return { stats, recordFlashcard, recordQuiz }
+  const recordWrite = (chars: number, avgScore: number) =>
+    setStats((prev) => ({
+      ...prev,
+      writeSessions: (prev.writeSessions ?? 0) + 1,
+      writeChars: (prev.writeChars ?? 0) + chars,
+      writeTotalScore: (prev.writeTotalScore ?? 0) + avgScore,
+      writeBestScore: Math.max(prev.writeBestScore ?? 0, avgScore),
+    }))
+
+  return { stats, recordFlashcard, recordQuiz, recordWrite }
 }

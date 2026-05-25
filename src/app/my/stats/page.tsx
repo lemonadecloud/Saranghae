@@ -12,6 +12,8 @@ import {
   TrendingUp,
   Award,
   Zap,
+  PenLine,
+  Star,
 } from 'lucide-react'
 import { useStudyStats } from '@/hooks/useStudyStats'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
@@ -20,7 +22,13 @@ export default function StatsPage() {
   const { stats } = useStudyStats()
   const [savedIds] = useLocalStorage<string[]>('kpk_saved', [])
 
-  const totalSessions = stats.flashcardSessions + stats.quizSessions
+  const writeSessions = stats.writeSessions ?? 0
+  const writeChars = stats.writeChars ?? 0
+  const writeTotalScore = stats.writeTotalScore ?? 0
+  const writeBestScore = stats.writeBestScore ?? 0
+  const writeAvgScore = writeSessions > 0 ? Math.round(writeTotalScore / writeSessions) : null
+
+  const totalSessions = stats.flashcardSessions + stats.quizSessions + writeSessions
   const quizAccuracy =
     stats.quizQuestions > 0
       ? Math.round((stats.quizCorrect / stats.quizQuestions) * 100)
@@ -86,6 +94,11 @@ export default function StatsPage() {
           </div>
           <div className="w-px bg-white/10" />
           <div>
+            <p className="text-2xl font-bold text-purple-400">{writeSessions}</p>
+            <p className="text-text-muted text-xs mt-0.5">따라쓰기</p>
+          </div>
+          <div className="w-px bg-white/10" />
+          <div>
             <p className="text-2xl font-bold text-text-primary">{savedIds.length}</p>
             <p className="text-text-muted text-xs mt-0.5">Saved</p>
           </div>
@@ -148,6 +161,37 @@ export default function StatsPage() {
               label="Avg Questions"
               value={avgCorrectPerQuiz}
               sub="per session"
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Write stats */}
+      {writeSessions > 0 && (
+        <section className="mb-8">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-text-muted mb-4 flex items-center gap-2">
+            <PenLine size={14} className="text-purple-400" /> 따라쓰기
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <StatCard
+              icon={PenLine}
+              color="#A855F7"
+              label="Sessions"
+              value={writeSessions}
+            />
+            <StatCard
+              icon={Star}
+              color="#A855F7"
+              label="Avg Score"
+              value={writeAvgScore !== null ? `${writeAvgScore}점` : '—'}
+              sub={`Best: ${writeBestScore}점`}
+            />
+            <StatCard
+              icon={TrendingUp}
+              color="#A855F7"
+              label="Chars Practiced"
+              value={writeChars}
+              sub="total characters"
             />
           </div>
         </section>

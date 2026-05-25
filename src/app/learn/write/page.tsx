@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { RotateCcw, ChevronDown, ArrowRight, ArrowLeft, CheckCheck, PenLine } from 'lucide-react'
 import { getAllExpressions, getAllArtists } from '@/lib/data'
 import { scorePixelCoverage, getKoreanChars, scoreToStars } from '@/lib/hangul-recognizer'
+import { useStudyStats } from '@/hooks/useStudyStats'
 
 const CANVAS_SIZE = 320
 const BRUSH_SIZE = 14
@@ -44,6 +45,7 @@ export default function WritePage() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const guideCanvasRef = useRef<HTMLCanvasElement>(null)
+  const { recordWrite } = useStudyStats()
 
   const expr = expressions[exprIdx]
   const chars = getKoreanChars(expr.korean)
@@ -163,6 +165,12 @@ export default function WritePage() {
   // ── Next character ────────────────────────────────────────────
   function nextChar() {
     if (charIdx + 1 >= chars.length) {
+      const finalScores = [...charScores]
+      finalScores[charIdx] = lastScore
+      const avg = finalScores.length > 0
+        ? Math.round(finalScores.reduce((a, b) => a + b, 0) / finalScores.length)
+        : 0
+      recordWrite(chars.length, avg)
       setDone(true)
       return
     }
