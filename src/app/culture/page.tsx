@@ -40,8 +40,8 @@ export default function CulturePage() {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-text-primary mb-2">드라마 & 예능</h1>
-        <p className="text-text-muted">인기 한국 드라마와 예능에서 배우는 실전 표현들</p>
+        <h1 className="text-3xl font-bold text-text-primary mb-2">Drama & Variety</h1>
+        <p className="text-text-muted">Real expressions from popular Korean dramas and variety shows</p>
       </div>
 
       {/* Genre filter */}
@@ -57,7 +57,7 @@ export default function CulturePage() {
               border: `1px solid ${genre === g ? '#FF2D78' : 'rgba(255,255,255,0.08)'}`,
             }}
           >
-            {g === 'all' ? '전체' : g === 'drama' ? '📺 드라마' : '🎉 예능'}
+            {g === 'all' ? 'All' : g === 'drama' ? '📺 Drama' : '🎉 Variety'}
           </button>
         ))}
       </div>
@@ -73,7 +73,7 @@ export default function CulturePage() {
             border: '1px solid rgba(255,255,255,0.08)',
           }}
         >
-          전체 프로그램
+          All Shows
         </button>
         {filteredShows.map(show => (
           <button
@@ -93,7 +93,7 @@ export default function CulturePage() {
 
       {/* Expression count */}
       <p className="text-text-muted text-sm mb-5">
-        {expressions.length}개의 표현
+        {expressions.length} expressions
       </p>
 
       {/* Expression list */}
@@ -161,7 +161,7 @@ export default function CulturePage() {
                       className="rounded-xl p-3"
                       style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
                     >
-                      <p className="text-xs text-text-muted mb-1 font-semibold">뜻 (한국어)</p>
+                      <p className="text-xs text-text-muted mb-1 font-semibold">Korean Meaning</p>
                       <p className="text-text-primary text-sm">{expr.meaningKo}</p>
                     </div>
                     <div
@@ -178,7 +178,7 @@ export default function CulturePage() {
                     className="rounded-xl p-4 mb-4"
                     style={{ background: `${show.color}0C`, border: `1px solid ${show.color}22` }}
                   >
-                    <p className="text-xs font-semibold mb-1.5" style={{ color: show.color }}>뉘앙스 포인트</p>
+                    <p className="text-xs font-semibold mb-1.5" style={{ color: show.color }}>Nuance</p>
                     <p className="text-text-primary text-sm leading-relaxed">{expr.nuanceNote}</p>
                   </div>
 
@@ -214,7 +214,7 @@ export default function CulturePage() {
                       }}
                     >
                       {isSaved ? <BookmarkCheck size={13} /> : <BookmarkPlus size={13} />}
-                      {isSaved ? '저장됨' : '저장'}
+                      {isSaved ? 'Saved' : 'Save'}
                     </button>
                   </div>
                 </div>
@@ -227,7 +227,7 @@ export default function CulturePage() {
       {expressions.length === 0 && (
         <div className="text-center py-20">
           <Tv size={40} className="mx-auto mb-4 opacity-20" />
-          <p className="text-text-muted">이 카테고리에 표현이 없어요</p>
+          <p className="text-text-muted">No expressions in this category</p>
         </div>
       )}
     </div>

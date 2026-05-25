@@ -21,7 +21,7 @@ const modes = [
   {
     href: '/learn/write',
     icon: PenLine,
-    title: '따라쓰기',
+    title: 'Stroke Practice',
     desc: 'Practice writing real K-pop expressions character by character on a canvas. Trace each syllable and get instant accuracy scores.',
     color: '#A855F7',
     badge: 'Available Now',

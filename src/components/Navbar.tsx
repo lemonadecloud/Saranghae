@@ -8,7 +8,7 @@ import { Menu, X, Music2 } from 'lucide-react'
 const navLinks = [
   { href: '/artists', label: 'Artists' },
   { href: '/expressions', label: 'Expressions' },
-  { href: '/culture', label: '드라마 & 예능' },
+  { href: '/culture', label: 'Culture' },
   { href: '/learn', label: 'Learn' },
   { href: '/my', label: 'My Page' },
 ]

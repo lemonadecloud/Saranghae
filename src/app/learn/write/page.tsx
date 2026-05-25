@@ -291,7 +291,7 @@ export default function WritePage() {
           style={{ background: 'linear-gradient(135deg, #12121A, #1A1A2E)', border: `1px solid ${color}33` }}
         >
           <p className="text-5xl mb-4">{finalStars === 3 ? '🎉' : finalStars >= 2 ? '😊' : '💪'}</p>
-          <h2 className="text-2xl font-bold text-text-primary mb-2">완료!</h2>
+          <h2 className="text-2xl font-bold text-text-primary mb-2">Complete!</h2>
           <p className="text-text-muted mb-6 text-sm">"{expr.korean}"</p>
 
           <div className="flex gap-1 justify-center mb-4">
@@ -300,9 +300,9 @@ export default function WritePage() {
             ))}
           </div>
 
-          <p className="text-4xl font-bold mb-1" style={{ color }}>{avgScore}점</p>
+          <p className="text-4xl font-bold mb-1" style={{ color }}>{avgScore}pt</p>
           <p className="text-text-muted text-sm mb-8">
-            {finalStars === 3 ? '완벽해요! 원어민 같아요 🔥' : finalStars === 2 ? '잘 했어요! 조금만 더 연습하면 완벽해요.' : '좋은 시작이에요! 계속 연습해봐요.'}
+            {finalStars === 3 ? 'Perfect! You write like a native 🔥' : finalStars === 2 ? 'Great job! A little more practice and you\'ll nail it.' : 'Good start! Keep practicing.'}
           </p>
 
           {/* Per-character breakdown */}
@@ -315,7 +315,7 @@ export default function WritePage() {
                 >
                   {ch}
                 </span>
-                <span className="text-xs text-text-muted">{charScores[i] ?? 0}점</span>
+                <span className="text-xs text-text-muted">{charScores[i] ?? 0}pt</span>
               </div>
             ))}
           </div>
@@ -326,14 +326,14 @@ export default function WritePage() {
               className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:scale-105"
               style={{ background: `${color}22`, border: `1px solid ${color}44`, color }}
             >
-              <RotateCcw size={14} /> 다시 쓰기
+              <RotateCcw size={14} /> Try Again
             </button>
             <Link
               href="/learn"
               className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white transition-all hover:scale-105"
               style={{ background: `linear-gradient(90deg, ${color}, #FF6B35)` }}
             >
-              학습 메뉴로 <ArrowRight size={14} />
+              Back to Learn <ArrowRight size={14} />
             </Link>
           </div>
         </div>
@@ -346,7 +346,7 @@ export default function WritePage() {
     <div className="max-w-lg mx-auto px-4 py-10">
       {/* Back */}
       <Link href="/learn" className="inline-flex items-center gap-1.5 text-text-muted text-sm mb-6 hover:text-text-primary transition-colors">
-        <ArrowLeft size={14} /> 학습 메뉴
+        <ArrowLeft size={14} /> Study Modes
       </Link>
 
       {/* Expression picker */}
@@ -437,7 +437,7 @@ export default function WritePage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-3 px-1">
           <div>
-            <span className="text-text-muted text-xs">{charIdx + 1} / {chars.length} 번째 글자</span>
+            <span className="text-text-muted text-xs">Character {charIdx + 1} of {chars.length}</span>
             <p className="text-text-primary text-sm font-medium">{expr.meaningEn.slice(0, 40)}</p>
           </div>
           <div className="flex gap-2">
@@ -450,14 +450,14 @@ export default function WritePage() {
                 background: showStrokeOrder ? `${color}11` : 'transparent',
               }}
             >
-              <Brush size={12} /> 획순
+              <Brush size={12} /> Stroke Order
             </button>
             <button
               onClick={clearCanvas}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all hover:bg-white/5"
               style={{ color: '#5A5A7A', border: '1px solid rgba(255,255,255,0.06)' }}
             >
-              <RotateCcw size={12} /> 지우기
+              <RotateCcw size={12} /> Clear
             </button>
           </div>
         </div>
@@ -508,7 +508,7 @@ export default function WritePage() {
           {!hasStrokes && !checked && (
             <div className="absolute inset-0 flex items-end justify-center pb-6 pointer-events-none">
               <span className="text-xs px-3 py-1.5 rounded-full" style={{ background: 'rgba(0,0,0,0.5)', color: '#5A5A7A' }}>
-                <PenLine size={11} className="inline mr-1" />위 글자를 따라 써보세요
+                <PenLine size={11} className="inline mr-1" />Trace the character above
               </span>
             </div>
           )}
@@ -518,9 +518,9 @@ export default function WritePage() {
         {checked && (
           <div className="mt-4 text-center animate-fade-in">
             <Stars count={stars} />
-            <p className="text-3xl font-bold mt-2 mb-1" style={{ color }}>{lastScore}점</p>
+            <p className="text-3xl font-bold mt-2 mb-1" style={{ color }}>{lastScore}pt</p>
             <p className="text-text-muted text-sm">
-              {stars === 3 ? '완벽해요! 🔥' : stars === 2 ? '잘 썼어요! 👍' : stars === 1 ? '조금 더 연습해봐요 💪' : '다시 써볼까요? 😊'}
+              {stars === 3 ? 'Perfect! 🔥' : stars === 2 ? 'Well done! 👍' : stars === 1 ? 'Keep practicing 💪' : 'Give it another try 😊'}
             </p>
           </div>
         )}
@@ -539,7 +539,7 @@ export default function WritePage() {
               cursor: hasStrokes ? 'pointer' : 'not-allowed',
             }}
           >
-            <CheckCheck size={16} /> 채점하기
+            <CheckCheck size={16} /> Check Score
           </button>
         ) : (
           <>
@@ -548,14 +548,14 @@ export default function WritePage() {
               className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all hover:scale-105"
               style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: '#9090B0' }}
             >
-              <RotateCcw size={15} /> 다시
+              <RotateCcw size={15} /> Retry
             </button>
             <button
               onClick={nextChar}
               className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm text-white transition-all hover:scale-105"
               style={{ background: `linear-gradient(90deg, ${color}, #FF6B35)` }}
             >
-              {charIdx + 1 >= chars.length ? '완료! 🎉' : `다음 글자 →`}
+              {charIdx + 1 >= chars.length ? 'Finish! 🎉' : 'Next character →'}
             </button>
           </>
         )}
