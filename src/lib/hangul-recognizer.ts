@@ -81,35 +81,54 @@ export function evaluateStroke(drawn: Point[], template: Point[], tolerance = 20
 export function scorePixelCoverage(char: string, drawCanvas: HTMLCanvasElement, fontSize: number): number {
   if (typeof document === 'undefined') return 0
   const size = drawCanvas.width
-  const temp = document.createElement('canvas')
-  temp.width = size
-  temp.height = size
-  const ctx = temp.getContext('2d')!
-  ctx.clearRect(0, 0, size, size)
-  ctx.font = `bold ${fontSize}px "Noto Sans KR", sans-serif`
-  ctx.fillStyle = '#ffffff'
-  ctx.textAlign = 'center'
-  ctx.textBaseline = 'middle'
-  ctx.fillText(char, size / 2, size / 2)
 
-  const guide = ctx.getImageData(0, 0, size, size).data
+  // Sharp guide — used for coverage (how much of the character was traced)
+  const sharpCanvas = document.createElement('canvas')
+  sharpCanvas.width = size
+  sharpCanvas.height = size
+  const sharpCtx = sharpCanvas.getContext('2d')!
+  sharpCtx.clearRect(0, 0, size, size)
+  sharpCtx.font = `bold ${fontSize}px "Noto Sans KR", sans-serif`
+  sharpCtx.fillStyle = '#ffffff'
+  sharpCtx.textAlign = 'center'
+  sharpCtx.textBaseline = 'middle'
+  sharpCtx.fillText(char, size / 2, size / 2)
+
+  // Blurred guide — used for precision (allows brush overshoot tolerance)
+  const blurCanvas = document.createElement('canvas')
+  blurCanvas.width = size
+  blurCanvas.height = size
+  const blurCtx = blurCanvas.getContext('2d')!
+  blurCtx.clearRect(0, 0, size, size)
+  blurCtx.filter = 'blur(18px)'
+  blurCtx.font = `bold ${fontSize}px "Noto Sans KR", sans-serif`
+  blurCtx.fillStyle = '#ffffff'
+  blurCtx.textAlign = 'center'
+  blurCtx.textBaseline = 'middle'
+  blurCtx.fillText(char, size / 2, size / 2)
+
+  const sharpData = sharpCtx.getImageData(0, 0, size, size).data
+  const blurData = blurCtx.getImageData(0, 0, size, size).data
   const draw = drawCanvas.getContext('2d')!.getImageData(0, 0, size, size).data
 
-  let guideN = 0, overlap = 0, outside = 0
-  for (let i = 0; i < guide.length; i += 4) {
-    const isGuide = guide[i + 3] > 80
+  let guideN = 0, overlap = 0, drawnPixels = 0, outsideBlur = 0
+  for (let i = 0; i < sharpData.length; i += 4) {
+    const isGuide = sharpData[i + 3] > 80
+    const isBlurZone = blurData[i + 3] > 30
     const isDraw = draw[i + 3] > 50
     if (isGuide) guideN++
+    if (isDraw) drawnPixels++
     if (isGuide && isDraw) overlap++
-    if (!isGuide && isDraw) outside++
+    if (!isBlurZone && isDraw) outsideBlur++
   }
 
   if (guideN === 0) return 0
   const coverage = overlap / guideN
-  const total = overlap + outside
-  const precision = total > 0 ? overlap / total : 0
-  if (coverage + precision === 0) return 0
-  return Math.round((2 * coverage * precision) / (coverage + precision) * 100)
+  const precision = drawnPixels > 0 ? Math.max(0, 1 - outsideBlur / drawnPixels) : 0
+
+  // Weight coverage heavily — tracing matters more than staying perfectly inside
+  const raw = coverage * 0.75 + precision * 0.25
+  return Math.min(100, Math.round(raw * 120 + 8))
 }
 
 export function getKoreanChars(text: string): string[] {
