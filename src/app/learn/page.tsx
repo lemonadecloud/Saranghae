@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Layers, HelpCircle, ArrowRight } from 'lucide-react'
+import { Layers, HelpCircle, ArrowRight, PenLine } from 'lucide-react'
 
 const modes = [
   {
@@ -16,6 +16,14 @@ const modes = [
     title: 'Quiz',
     desc: "Test yourself with multiple-choice questions on the expressions you've studied. Build streaks and track your score.",
     color: '#FF2D78',
+    badge: 'Available Now',
+  },
+  {
+    href: '/learn/write',
+    icon: PenLine,
+    title: '따라쓰기',
+    desc: 'Practice writing real K-pop expressions character by character on a canvas. Trace each syllable and get instant accuracy scores.',
+    color: '#A855F7',
     badge: 'Available Now',
   },
 ]
