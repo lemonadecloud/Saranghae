@@ -17,14 +17,27 @@ export default function ArtistCard({ artist }: ArtistCardProps) {
       <div className="artist-card p-6 cursor-pointer flex flex-col gap-4 h-full">
         {/* Avatar */}
         <div
-          className="w-full aspect-square rounded-2xl flex items-center justify-center text-4xl font-display tracking-widest"
+          className="w-full aspect-square rounded-2xl overflow-hidden flex items-center justify-center"
           style={{
             background: `linear-gradient(135deg, ${artist.color}22, ${artist.color}44)`,
             border: `1px solid ${artist.color}44`,
-            color: artist.color,
           }}
         >
-          {initials}
+          {artist.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={artist.imageUrl}
+              alt={artist.nameEn}
+              className="w-full h-full object-cover object-top"
+            />
+          ) : (
+            <span
+              className="text-4xl font-display tracking-widest"
+              style={{ color: artist.color }}
+            >
+              {initials}
+            </span>
+          )}
         </div>
 
         {/* Info */}
