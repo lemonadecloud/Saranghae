@@ -282,8 +282,9 @@ export function getComposedStrokes(char: string, canvasSize: number): ComposedSt
   if (jungRaw) jungRaw.forEach(pts => result.push(mapStroke(pts, layout.jung)))
 
   if (jong && layout.jong) {
+    const jongBox = layout.jong
     const jongRaw = JAMO[jong]
-    if (jongRaw) jongRaw.forEach(pts => result.push(mapStroke(pts, layout.jong)))
+    if (jongRaw) jongRaw.forEach(pts => result.push(mapStroke(pts, jongBox)))
   }
 
   return result
