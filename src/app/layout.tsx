@@ -32,10 +32,10 @@ const jetBrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'KPop Korean — Learn Korean Through Artists You Love',
+  title: 'Saranghae — Learn Korean Through Artists You Love',
   description:
-    'Learn Korean with real expressions from your favorite K-pop artists — TXT, TWICE, aespa, NewJeans, and BTS.',
-  keywords: 'Korean learning, K-pop, Korean expressions, TXT, TWICE, aespa, NewJeans, BTS',
+    'Saranghae (사랑해) — Learn Korean with real expressions from your favorite K-pop artists: TXT, TWICE, aespa, NewJeans, and BTS.',
+  keywords: 'Saranghae, Korean learning, K-pop, Korean expressions, TXT, TWICE, aespa, NewJeans, BTS',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -50,8 +50,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ChatWidget />
         <footer className="border-t border-white/5 py-8 mt-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-text-muted text-sm">
-            <p className="font-display tracking-widest text-lg text-brand-pink mb-2">KPOP KOREAN</p>
-            <p>Learn Korean through the artists you love. © 2026 KPop Korean</p>
+            <p className="font-display tracking-widest text-xl text-brand-pink mb-1">SARANGHAE</p>
+            <p className="font-display tracking-widest text-xs text-text-muted mb-2">사랑해 · KPOP KOREAN</p>
+            <p>Learn Korean through the artists you love. © 2026 Saranghae</p>
           </div>
         </footer>
       </body>

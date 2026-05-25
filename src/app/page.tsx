@@ -42,16 +42,17 @@ export default function HomePage() {
         </div>
 
         <div className="relative max-w-4xl mx-auto text-center">
-          <p className="text-brand-pink font-display tracking-[0.3em] text-sm mb-4 uppercase">
-            K-Pop × Korean Learning
-          </p>
-          <h1 className="text-5xl md:text-7xl font-display tracking-wide text-text-primary mb-6 leading-none">
+          <h1 className="text-6xl md:text-8xl font-display tracking-widest mb-2 leading-none">
+            <span className="gradient-text-pink-cyan glow-pink">SARANGHAE</span>
+          </h1>
+          <p className="text-text-muted font-display tracking-[0.25em] text-sm mb-8">사랑해 &nbsp;·&nbsp; KPOP KOREAN</p>
+          <h2 className="text-3xl md:text-5xl font-display tracking-wide text-text-primary mb-6 leading-tight">
             LEARN KOREAN
             <br />
-            <span className="gradient-text-pink-cyan glow-pink">THROUGH ARTISTS</span>
+            <span className="gradient-text-pink-cyan">THROUGH ARTISTS</span>
             <br />
             YOU LOVE
-          </h1>
+          </h2>
           <p className="text-text-secondary text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
             Learn natural Korean with real expressions from TXT, TWICE, aespa, NewJeans &amp; BTS.
           </p>

@@ -28,8 +28,11 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <Music2 size={22} className="text-brand-pink group-hover:scale-110 transition-transform" />
-            <span className="font-display tracking-widest text-xl text-text-primary">
-              KPOP <span className="text-brand-pink">KOREAN</span>
+            <span className="font-display tracking-widest text-xl text-brand-pink">
+              SARANGHAE
+            </span>
+            <span className="hidden sm:inline text-xs text-text-muted tracking-widest font-display">
+              KPOP KOREAN
             </span>
           </Link>
 
