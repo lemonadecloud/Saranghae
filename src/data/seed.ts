@@ -183,7 +183,7 @@ export const artists: Artist[] = [
     nameKo: '코르티스',
     nameEn: 'CORTIS',
     shortName: 'CORTIS',
-    agency: 'CORTIS ENT',
+    agency: 'HYBE',
     debutYear: 2023,
     memberCount: 5,
     groupType: 'boygroup',
