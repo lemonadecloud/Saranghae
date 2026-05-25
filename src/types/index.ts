@@ -1,4 +1,23 @@
 export type SourceType = 'interview' | 'variety' | 'lyrics' | 'sns' | 'behind'
+export type PlaceCategory = 'idol-spot' | 'beauty' | 'fashion' | 'tourism'
+
+export interface Place {
+  id: string
+  nameKo: string
+  nameEn: string
+  category: PlaceCategory
+  artistIds: string[]
+  address: string
+  addressEn: string
+  googleMapsUrl: string
+  descriptionKo: string
+  descriptionEn: string
+  sourceShow?: string
+  sourceUrl?: string
+  imageUrl?: string
+  tags: string[]
+  purchaseUrl?: string
+}
 export type Difficulty = 'beginner' | 'elementary' | 'intermediate'
 export type GroupType = 'boygroup' | 'girlgroup' | 'solo'
 export type ShowGenre = 'drama' | 'variety'

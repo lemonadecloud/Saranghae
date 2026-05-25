@@ -9,6 +9,7 @@ const navLinks = [
   { href: '/artists', label: 'Artists' },
   { href: '/expressions', label: 'Expressions' },
   { href: '/culture', label: 'Drama & Variety' },
+  { href: '/places', label: 'Places' },
   { href: '/learn', label: 'Learn' },
   { href: '/my', label: 'My Page' },
 ]
